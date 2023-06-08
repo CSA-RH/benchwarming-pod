@@ -6,17 +6,7 @@ metadata:
   name: low-priority-pod
   namespace: phase-1
 spec:
-  replicas: 5
-  affinity:
-    nodeAffinity:
-      preferredDuringSchedulingIgnoredDuringExecution:
-        - weight: 1
-          preference:
-            matchExpressions:
-              - key: app
-            operator: In
-            values:
-              - low-priority-pod
+  replicas: 3
   selector:
     matchLabels:
       app: low-priority-pod
@@ -25,12 +15,23 @@ spec:
     metadata:
       labels:
         app: low-priority-pod
+        priority: low # Label indicating low priority
     spec:
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: priority
+                    operator: In
+                    values:
+                      - low
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - image: busybox
           name: busybox
-          command: [ "sleep" ]
-          args: [ "infinity" ]
+          command: ["sleep"]
+          args: ["infinity"]
           resources:
             requests:
               memory: "2000Mi"
