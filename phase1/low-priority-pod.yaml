@@ -6,7 +6,7 @@ metadata:
   name: low-priority-pod
   namespace: phase-1
 spec:
-  replicas: 3
+  replicas: 6
   selector:
     matchLabels:
       app: low-priority-pod
@@ -19,14 +19,16 @@ spec:
     spec:
       affinity:
         podAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: priority
-                    operator: In
-                    values:
-                      - low
-              topologyKey: "kubernetes.io/hostname"
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: priority
+                      operator: In
+                      values:
+                        - low
+                topologyKey: "kubernetes.io/hostname"
       containers:
         - image: busybox
           name: busybox
