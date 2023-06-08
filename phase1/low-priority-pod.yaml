@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: low-priority-pod
+  name: low-priority-pod
+  namespace: phase-1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: low-priority-pod
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: low-priority-pod
+    spec:
+      containers:
+      - image: busybox
+        name: busybox
+        command: [ "sleep" ]
+        args: [ "infinity" ]

@@ -1,0 +1,6 @@
+kind: Node
+apiVersion: v1
+metadata:
+  name: ip-10-0-152-212.us-east-2.compute.internal
+  labels:
+    human-name: node-1
