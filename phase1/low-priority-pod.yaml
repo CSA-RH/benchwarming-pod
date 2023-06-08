@@ -6,7 +6,17 @@ metadata:
   name: low-priority-pod
   namespace: phase-1
 spec:
-  replicas: 4
+  replicas: 5
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+        - weight: 1
+          preference:
+            matchExpressions:
+              - key: app
+            operator: In
+            values:
+              - low-priority-pod
   selector:
     matchLabels:
       app: low-priority-pod
@@ -17,7 +27,10 @@ spec:
         app: low-priority-pod
     spec:
       containers:
-      - image: busybox
-        name: busybox
-        command: [ "sleep" ]
-        args: [ "infinity" ]
+        - image: busybox
+          name: busybox
+          command: [ "sleep" ]
+          args: [ "infinity" ]
+          resources:
+            requests:
+              memory: "2000Mi"
