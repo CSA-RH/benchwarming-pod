@@ -15,12 +15,12 @@ spec:
     metadata:
       labels:
         app: low-priority-pod
-        priority: low # Label indicating low priority
+        priority: low
     spec:
       affinity:
         podAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
+            - weight: 50
               podAffinityTerm:
                 labelSelector:
                   matchExpressions:
@@ -30,10 +30,8 @@ spec:
                         - low
                 topologyKey: "kubernetes.io/hostname"
       containers:
-        - image: busybox
-          name: busybox
-          command: ["sleep"]
-          args: ["infinity"]
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/httpd
+          name: httpd
           resources:
             requests:
               memory: "2000Mi"

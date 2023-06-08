@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: high-priority-pod
+  name: high-priority-pod
+  namespace: phase-1
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: high-priority-pod
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: high-priority-pod
+        priority: high # Label indicating high priority
+    spec:
+      priorityClassName: high-priority
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/httpd
+          name: httpd
+          resources:
+            requests:
+              memory: "2000Mi"
