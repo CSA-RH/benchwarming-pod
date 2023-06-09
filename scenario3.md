@@ -73,7 +73,6 @@ But there is no space left in the 2 nodes, so:
 
     > 🕣 **Time taken**: instantaneous
 
-
 So it'll go from this:
 
 ```mermaid
@@ -97,7 +96,6 @@ graph TB
    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
    class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9 highprio;
    class lp1,lp2,lp3,lp4,lp5,lp6,lp7,lp8,lp9 lowprio;
-   class NodeA,NodeB,NodeC cluster;
 ```
 
 ```mermaid
@@ -105,15 +103,12 @@ graph TB
    subgraph Pending to be scheduled
        hp10(High priority pod 10)
        hp9(High priority pod 9)
+       hp10 ~~~ hp9
    end
 
-
-   classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
    classDef highprio fill:#880000,stroke:#fff,stroke-width:4px,color:#fff;
    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
-   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9,hp10 highprio;
-   class lp1,lp2,lp3,lp4,lp5,lp6,lp7,lp8,lp9 lowprio;
-   class NodeA,NodeB,NodeC cluster;
+   class hp9,hp10 highprio;
 ```
 
 To this:
