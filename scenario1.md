@@ -2,7 +2,34 @@
 
 ## Scenario 1
 
+4 new high availability pods arrive, and there are not enough resources to accomodate them and the previous 6 low priority nodes.
+
+### Cleanup (if you have done other scenarios before)
+
+Delete old pods from other scenarios
+
+```bash
+oc delete deployment low-priority-pod
+oc delete deployment high-priority-pod
+```
+
+> ⚠️ Wait for pods to be terminated and make let the node autoscaler do it's work dialing the nodes back to 2!
+
+Run the deployments again
+
+```bash
+oc apply -f low-priority-pod.yaml
+oc apply -f high-priority-pod.yaml
+```
+
+### Setup
+
+```bash
+
+```
+
 ```mermaid
+%%{init: {"flowchart": { "useMaxWidth": false } }}%%
 graph TB
    subgraph NodeB
        lp6(Low priority pod 6)
