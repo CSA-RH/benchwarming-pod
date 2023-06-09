@@ -24,9 +24,7 @@ oc apply -f high-priority-pod.yaml
 
 ### Setup
 
-```bash
-
-```
+This is the current state of the cluster
 
 ```mermaid
 %%{init: {"flowchart": { "useMaxWidth": false } }}%%
@@ -51,7 +49,13 @@ graph TB
    class NodeA,NodeB cluster;
 ```
 
-if we now add 3 high priority nodes, they'd be pushed to node B since there are available resources for them.
+Let's add 3 more high priority nodes:
+
+```bash
+oc scale --replicas=3 deployment high-priority-pod
+```
+
+they're be pushed to node B since there are available resources for them.
 
 ```mermaid
 graph TB
@@ -78,7 +82,13 @@ graph TB
    class NodeA,NodeB cluster;
 ```
 
-however if we add a 4th high priority node, it won't fit in any of the two nodes, so:
+however if we add a 4th high priority node via:
+
+```bash
+oc scale --replicas=4 deployment high-priority-pod
+```
+
+it won't fit in any of the two nodes, so:
 
 1) One node will open up space for the new pod (let's say Node A) by evicting two low priority pods and marking them as pending.
 2) The new, 4th high priority node will be deployed
