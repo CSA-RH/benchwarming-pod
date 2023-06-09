@@ -55,6 +55,8 @@ Let's add 3 more high priority nodes:
 oc scale --replicas=3 deployment high-priority-pod
 ```
 
+> 🕣 **Time taken**: instantaneous
+
 they're be pushed to node B since there are available resources for them.
 
 ```mermaid
@@ -91,8 +93,17 @@ oc scale --replicas=4 deployment high-priority-pod
 it won't fit in any of the two nodes, so:
 
 1) One node will open up space for the new pod (let's say Node A) by evicting two low priority pods and marking them as pending.
+
+   > 🕣 **Time taken**: instantaneous
+
 2) The new, 4th high priority node will be deployed
+
+   > 🕣 **Time taken**: instantaneous
+
 3) Since we have node autoscaling, a new node will be provisioned for the 2 pending low priority pods
+
+   > 🕣 **Time taken**: 7-15 minutes
+
 4) After a few minutes, Node C is ready and the pending pods are assigned to it.
 
 ```mermaid
