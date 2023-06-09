@@ -1,4 +1,4 @@
-# Scenario 2
+# Scenario 2: Scaling down, removing underused node
 
 We start from [🔗 Scenario 1](./scenario1.md), but de-scaling back: What if we delete half the high priority load?
 

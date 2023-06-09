@@ -1,4 +1,4 @@
-# Scenario 1
+# Scenario 1: Scaling up, needing a new node
 
 4 new high availability pods arrive, and there are not enough resources to accomodate them and the previous 6 low priority nodes.
 

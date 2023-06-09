@@ -1,4 +1,4 @@
-# Scenario 3
+# Scenario 3: Overflowing on only high priority pods
 
 Let's assume we have high priority pods filling up 2 nodes and no low priority pods. What would happen if we add a new high priority pod?
 
