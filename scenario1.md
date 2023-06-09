@@ -13,7 +13,7 @@ oc delete deployment low-priority-pod
 oc delete deployment high-priority-pod
 ```
 
-> ⚠️ Wait for pods to be terminated and make let the node autoscaler do it's work dialing the nodes back to 2!
+> ⚠️ Wait for pods to be terminated and make let the node autoscaler do its work dialing the nodes back to 2!
 
 Run the deployments again
 
