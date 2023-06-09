@@ -22,3 +22,4 @@ Head over to your openshift web portal, observability and try this prometheus qu
 kube_pod_container_resource_requests{namespace="phase-1", resource="memory"}
 ```
 
+
