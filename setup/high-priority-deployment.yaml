@@ -6,7 +6,7 @@ metadata:
   name: high-priority-pod
   namespace: benchwarming-autoscaling
 spec:
-  replicas: 6
+  replicas: 3
   selector:
     matchLabels:
       app: high-priority-pod

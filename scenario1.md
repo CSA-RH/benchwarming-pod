@@ -1,6 +1,6 @@
 # Scenario 1: Scaling up, needing a new node
 
-4 new high availability pods arrive, and there are not enough resources to accomodate them and the previous 6 low priority nodes.
+4 new high priority pods arrive, and there are not enough resources to accomodate them and the previous 3 high priority pods.
 
 ## Cleanup (if you have done other scenarios before)
 
@@ -17,7 +17,7 @@ Run the deployments again
 
 ```bash
 oc apply -f benchwarmer.yaml
-oc apply -f high-priority-pod.yaml
+oc apply -f high-priority-deployment.yaml
 ```
 
 ## Setup
@@ -28,145 +28,99 @@ This is the current state of the cluster
 %%{init: {"flowchart": { "useMaxWidth": false } }}%%
 graph TB
    subgraph NodeB
-       lp6(Low priority pod 6)
+       bw(Benchwarmer pod)
    end
    subgraph NodeA
-       lp1(Low priority pod 1)
-       lp2(Low priority pod 2)
-       lp3(Low priority pod 3)
-       lp4(Low priority pod 4)
-       lp5(Low priority pod 5)
+       hp3(High priority pod 3)
+       hp2(High priority pod 2)
+       hp1(High priority pod 1)
    end
  
    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
    classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
    classDef highprio fill:#ee0000,stroke:#fff,stroke-width:4px,color:#fff;
    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
-   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9 highprio;
-   class lp1,lp2,lp3,lp4,lp5,lp6,lp7,lp8,lp9 lowprio;
+   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9,hp10,hp11,hp12,hp13,hp14,hp15,hp16,hp17,hp18,hp19,hp20 highprio;
+   class bw lowprio;
    class NodeA,NodeB cluster;
 ```
 
-Let's add 3 more high priority nodes:
+Let's add 4 more high priority nodes:
 
 ```bash
-oc scale --replicas=3 deployment high-priority-pod
+oc scale --replicas=7 deployment high-priority-pod
 ```
-
 > 🕣 **Time taken**: instantaneous
 
-they're be pushed to node B since there are available resources for them.
+Here is what will happen:
+
+1) The 4 pods will be scheduled to be deployed
+2) One of the 4 can be deployed on Node A without going overboard, so it will do so
+3) The other 3 cannot, so they'll be deployed on Node B
+4) Node B has the benchwarming pod, which has an antiaffinity rule so it cannot be in a node with anything but its own type of pod, so it will be evicted when the high priority pods arrive (since they have `priorityClassName: high-priority` within their spec)
 
 ```mermaid
+%%{init: {"flowchart": { "useMaxWidth": false } }}%%
 graph TB
    subgraph NodeB
-       hp3(High priority pod 3)
-       hp2(High priority pod 2)
-       hp1(High priority pod 1)
-       lp6(Low priority pod 6)
-   end
-   subgraph NodeA
-       lp5(Low priority pod 5)
-       lp4(Low priority pod 4)
-       lp3(Low priority pod 3)
-       lp2(Low priority pod 2)
-       lp1(Low priority pod 1)
-   end
- 
-   classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
-   classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
-   classDef highprio fill:#ee0000,stroke:#fff,stroke-width:4px,color:#fff;
-   classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
-   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9 highprio;
-   class lp1,lp2,lp3,lp4,lp5,lp6,lp7,lp8,lp9 lowprio;
-   class NodeA,NodeB cluster;
-```
-
-however if we add a 4th high priority node via:
-
-```bash
-oc scale --replicas=4 deployment high-priority-pod
-```
-
-it won't fit in any of the two nodes, so:
-
-1) One node will open up space for the new pod (let's say Node A) by evicting two low priority pods and marking them as pending.
-
-   > 🕣 **Time taken**: instantaneous
-
-    ```mermaid
-    graph TB
-    subgraph NodeB
-        hp3(High priority pod 3)
-        hp2(High priority pod 2)
-        hp1(High priority pod 1)
-        lp6(Low priority pod 6)
-    end
-    subgraph NodeA
-        hp4(High priority pod 4)
-        lp5(Low priority pod 5)
-        lp4(Low priority pod 4)
-        lp3(Low priority pod 3)
-    end
-    
-    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
-    classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
-    classDef highprio fill:#ee0000,stroke:#fff,stroke-width:4px,color:#fff;
-    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
-    class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9 highprio;
-    class lp1,lp2,lp3,lp4,lp5,lp6,lp7,lp8,lp9 lowprio;
-    class NodeA,NodeB,NodeC cluster;
-    ```
-
-   ```mermaid
-    graph TB
-    subgraph Pending to be scheduled
-        lp10(High priority pod 2)
-        lp9(High priority pod 1)
-        lp10 ~~~ lp9
-    end
-
-    classDef lowprio fill:#1111a5,stroke:#fff,stroke-width:4px,color:#fff;
-    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
-    class lp9,lp10 lowprio;
-    ```
-
-2) The new, 4th high priority node will be deployed
-
-   > 🕣 **Time taken**: instantaneous
-
-3) Since we have node autoscaling, a new node will be provisioned for the 2 pending low priority pods
-
-   > 🕣 **Time taken**: 7-15 minutes
-
-4) After a few minutes, Node C is ready and the pending pods are assigned to it.
-
-```mermaid
-graph TB
-   subgraph NodeC
-       lp2(Low priority pod 2)
-       lp1(Low priority pod 1)
-   end
-   subgraph NodeB
-       hp3(High priority pod 3)
-       hp2(High priority pod 2)
-       hp1(High priority pod 1)
-       lp6(Low priority pod 6)
+       hp7(High priority pod 7)
+       hp6(High priority pod 6)
+       hp5(High priority pod 5)
    end
    subgraph NodeA
        hp4(High priority pod 4)
-       lp5(Low priority pod 5)
-       lp4(Low priority pod 4)
-       lp3(Low priority pod 3)
+       hp3(High priority pod 3)
+       hp2(High priority pod 2)
+       hp1(High priority pod 1)
    end
  
    classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
    classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
    classDef highprio fill:#ee0000,stroke:#fff,stroke-width:4px,color:#fff;
    classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
-   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9 highprio;
-   class lp1,lp2,lp3,lp4,lp5,lp6,lp7,lp8,lp9 lowprio;
-   class NodeA,NodeB,NodeC cluster;
+   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9,hp10,hp11,hp12,hp13,hp14,hp15,hp16,hp17,hp18,hp19,hp20 highprio;
+   class bw lowprio;
+   class NodeA,NodeB,NodeC,NodeD,NodeE cluster;
 ```
 
-So virtually there was no downtime on high priority pods.
+```mermaid
+graph TB
+   subgraph Pending to be scheduled
+       bw(Benchwarmer pod)
+   end
+
+   classDef lowpriopending fill:#1111a5,stroke:#fff,stroke-width:4px,color:#fff;
+   classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+   class bw lowpriopending;
+```
+
+1) A pending pod tells the node autoscaler to provision a new node for it.
+
+## Final result
+
+```mermaid
+%%{init: {"flowchart": { "useMaxWidth": false } }}%%
+graph TB
+   subgraph NodeC
+       bw(Benchwarmer pod)
+   end
+   subgraph NodeB
+       hp7(High priority pod 7)
+       hp6(High priority pod 6)
+       hp5(High priority pod 5)
+   end
+   subgraph NodeA
+       hp4(High priority pod 4)
+       hp3(High priority pod 3)
+       hp2(High priority pod 2)
+       hp1(High priority pod 1)
+   end
+ 
+   classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+   classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+   classDef highprio fill:#ee0000,stroke:#fff,stroke-width:4px,color:#fff;
+   classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9,hp10,hp11,hp12,hp13,hp14,hp15,hp16,hp17,hp18,hp19,hp20 highprio;
+   class bw lowprio;
+   class NodeA,NodeB,NodeC,NodeD,NodeE cluster;
+```

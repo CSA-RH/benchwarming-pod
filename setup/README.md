@@ -40,6 +40,29 @@ oc apply -f benchwarmer-deployment.yaml
 oc apply -f high-priority-deployment.yaml
 ```
 
-it's set to 2 replicas by default.
+it's set to 3 replicas by default.
 
 ### 4) Head over to the scenarios and try them
+
+## Initial setup
+
+```mermaid
+%%{init: {"flowchart": { "useMaxWidth": false } }}%%
+graph TB
+   subgraph NodeB
+       bw(Benchwarmer pod)
+   end
+   subgraph NodeA
+       hp3(High priority pod 3)
+       hp2(High priority pod 2)
+       hp1(High priority pod 1)
+   end
+ 
+   classDef plain fill:#ddd,stroke:#fff,stroke-width:4px,color:#000;
+   classDef lowprio fill:#326ce5,stroke:#fff,stroke-width:4px,color:#fff;
+   classDef highprio fill:#ee0000,stroke:#fff,stroke-width:4px,color:#fff;
+   classDef cluster fill:#fff,stroke:#bbb,stroke-width:2px,color:#326ce5;
+   class hp1,hp2,hp3,hp4,hp5,hp6,hp7,hp8,hp9,hp10,hp11,hp12,hp13,hp14,hp15,hp16,hp17,hp18,hp19,hp20 highprio;
+   class bw lowprio;
+   class NodeA,NodeB cluster;
+```
