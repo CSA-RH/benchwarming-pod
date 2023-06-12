@@ -7,14 +7,14 @@ We have 4 nodes up and running with an even load of both high and low priority p
 Delete old pods from other scenarios
 
 ```bash
-oc delete deployment low-priority-pod
+oc delete deployment benchwarmer
 oc delete deployment high-priority-pod
 ```
 
 Run the deployments again
 
 ```bash
-oc apply -f low-priority-pod.yaml
+oc apply -f benchwarmer.yaml
 oc apply -f high-priority-pod.yaml
 ```
 
@@ -23,7 +23,7 @@ oc apply -f high-priority-pod.yaml
 Let's fill the cluster up!
 
 ```bash
-oc scale --replicas=8 deployment low-priority-pod
+oc scale --replicas=8 deployment benchwarmer
 oc scale --replicas=8 deployment high-priority-pod
 ```
 
@@ -70,7 +70,7 @@ Great! Although we are pretty close to the 5 node maximum limit!
 Let's add 3 more low priority pods
 
 ```bash
-oc scale --replicas=13 deployment low-priority-pod
+oc scale --replicas=13 deployment benchwarmer
 ```
 
 > 🕣 **Time taken**: 6 minutes
@@ -130,7 +130,7 @@ Not an ideal scenario, but the only pod pending is a low priority, and all high 
 What if we hit it with a high priority pod load? maybe 3 more pods
 
 ```bash
-oc scale --replicas=13 deployment low-priority-pod
+oc scale --replicas=13 deployment benchwarmer
 ```
 
 > 🕣 **Time taken**: instantaneous (no new nodes can be created)

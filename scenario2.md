@@ -9,14 +9,14 @@ If you have done scenario 1, skip this step, if not then clean it up via:
 Delete old pods from other scenarios
 
 ```bash
-oc delete deployment low-priority-pod
+oc delete deployment benchwarmer
 oc delete deployment high-priority-pod
 ```
 
 Run the deployments again
 
 ```bash
-oc apply -f low-priority-pod.yaml
+oc apply -f benchwarmer.yaml
 oc apply -f high-priority-pod.yaml
 ```
 

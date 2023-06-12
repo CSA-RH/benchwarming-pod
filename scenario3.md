@@ -7,7 +7,7 @@ Let's assume we have high priority pods filling up 2 nodes and no low priority p
 Delete old pods from other scenarios
 
 ```bash
-oc delete deployment low-priority-pod
+oc delete deployment benchwarmer
 oc delete deployment high-priority-pod
 ```
 
