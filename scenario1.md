@@ -56,11 +56,9 @@ Here is what will happen:
 
 1) The 4 pods will be scheduled to be deployed
     > 🕣 **Time taken**: instantaneous
-2) One of the 4 can be deployed on Node A without going overboard, so it will do so
+2) The scheduler will try to evenly distribute the load between the nodes, there is plenty of room in Node B and a little on Node A, so it will spread them accordingly.
     > 🕣 **Time taken**: instantaneous
-3) The other 3 cannot, so they'll be deployed on Node B
-    > 🕣 **Time taken**: instantaneous
-4) Node B has the benchwarming pod, which has an antiaffinity rule so it cannot be in a node with anything but its own type of pod, so it will be evicted when the high priority pods arrive (since they have `priorityClassName: high-priority` within their spec)
+3) Node B has the benchwarming pod, which has an antiaffinity rule so it cannot be in a node with anything but its own type of pod, so it will be evicted when the high priority pods arrive (since they have `priorityClassName: high-priority` within their spec)
     > 🕣 **Time taken**: instantaneous
 
 ```mermaid
