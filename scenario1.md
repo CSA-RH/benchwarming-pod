@@ -2,7 +2,7 @@
 
 4 new high priority pods arrive, and there are not enough resources to accomodate them and the previous 3 high priority pods.
 
-## Cleanup (if you have done other scenarios before)
+## 🧹 Cleanup (if you have done other scenarios before)
 
 Delete old pods from other scenarios
 
@@ -20,7 +20,7 @@ oc apply -f benchwarmer.yaml
 oc apply -f high-priority-deployment.yaml
 ```
 
-## Setup
+## 📝 Setup
 
 This is the current state of the cluster
 
@@ -55,9 +55,13 @@ oc scale --replicas=7 deployment high-priority-pod
 Here is what will happen:
 
 1) The 4 pods will be scheduled to be deployed
+    > 🕣 **Time taken**: instantaneous
 2) One of the 4 can be deployed on Node A without going overboard, so it will do so
+    > 🕣 **Time taken**: instantaneous
 3) The other 3 cannot, so they'll be deployed on Node B
+    > 🕣 **Time taken**: instantaneous
 4) Node B has the benchwarming pod, which has an antiaffinity rule so it cannot be in a node with anything but its own type of pod, so it will be evicted when the high priority pods arrive (since they have `priorityClassName: high-priority` within their spec)
+    > 🕣 **Time taken**: instantaneous
 
 ```mermaid
 %%{init: {"flowchart": { "useMaxWidth": false } }}%%
@@ -95,8 +99,11 @@ graph TB
 ```
 
 1) A pending pod tells the node autoscaler to provision a new node for it.
+    > 🕣 **Time taken**: 7 minutes
 
-## Final result
+## ✅ Final result
+
+Despite the cloud provider requiring around 7 minutes to provision a new node, we had 0 high priority pod downtime thanks to the "spare" node kept around by the benchwarming pod
 
 ```mermaid
 %%{init: {"flowchart": { "useMaxWidth": false } }}%%
