@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: benchwarmer-pod
+  name: benchwarmer-pod
+  namespace: benchwarming-autoscaling
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: benchwarmer-pod
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: benchwarmer-pod
+        priority: low
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: NotIn
+                    values:
+                      - benchwarmer-pod
+              topologyKey: "kubernetes.io/hostname"
+      containers:
+        - image: image-registry.openshift-image-registry.svc:5000/openshift/httpd
+          name: httpd
+          resources:
+            limits:
+              memory: "200Mi"
+              cpu: "700m"
+            requests:
+              memory: "200Mi"
+              cpu: "700m"

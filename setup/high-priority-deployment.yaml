@@ -4,9 +4,9 @@ metadata:
   labels:
     app: high-priority-pod
   name: high-priority-pod
-  namespace: phase-1
+  namespace: benchwarming-autoscaling
 spec:
-  replicas: 0
+  replicas: 6
   selector:
     matchLabels:
       app: high-priority-pod
@@ -15,7 +15,6 @@ spec:
     metadata:
       labels:
         app: high-priority-pod
-        priority: high # Label indicating high priority
     spec:
       priorityClassName: high-priority
       containers:

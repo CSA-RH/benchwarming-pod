@@ -4,32 +4,42 @@ The main goal is to have a low priority, best-effort deployment that takes up 90
 
 ## Steps
 
-### 1) Create the project
+### 1) Create the project and change to it
+
+Let's do our testing in a separate namespace
 
 ```bash
 oc apply -f project-request.yaml
+oc project benchwarming-autoscaling
 ```
 
-### 2) Create low-priority deployment
-
-To create a new deployment of 6 replicas (should take up a one node and overflow into the next one under the current configurations)
+### 2) Ensure your machinepool on `rosa` is set to autoscale
 
 ```bash
-oc apply -f low-priority-pod.yaml
+rosa login
+rosa list machinepool --cluster=<myClusterId>
 ```
 
-Head over to your openshift web portal, observability and try this prometheus query
+If it's not set to autoscale, you can do it like so, let's set it from 2 to 5 nodes.
 
-```promql
-kube_pod_container_resource_requests{namespace="phase-1", resource="memory"}
+```bash
+rosa edit machinepool --enable-autoscaling --min-replicas=2 --max-replicas=5 --cluster=<myClusterId> <myMachinePoolId>
+```
+
+### 2) Create the benchwarming pod
+
+It's been created as a deployment in case you want to play around with scaling, but it only runs a single pod unless specified in a scenario
+
+```bash
+oc apply -f benchwarmer-deployment.yaml
 ```
 
 ### 3) Create the high-priority deployment
 
 ```bash
-oc apply -f high-priority-pod.yaml
+oc apply -f high-priority-deployment.yaml
 ```
 
-it's set to 0 replicas by default.
+it's set to 2 replicas by default.
 
 ### 4) Head over to the scenarios and try them
