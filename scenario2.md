@@ -114,12 +114,12 @@ graph TB
    class bw1,bw2 lowpriopending;
 ```
 
-1) A pending pod tells the node autoscaler to provision a new node for it.
+1) Two pending pods tell the node autoscaler to provision a new node for each.
     > 🕣 **Time taken**: 5 minutes
 
 ## ✅ Final result
 
-Despite the cloud provider requiring around 7 minutes to provision a new node, we had 0 high priority pod downtime thanks to the "spare" node kept around by the benchwarming pod
+Despite the cloud provider requiring around 5 minutes to provision two new node2, we had 0 high priority pod downtime thanks to the "spare" nodes kept around by the benchwarming pod
 
 ```mermaid
 %%{init: {"flowchart": { "useMaxWidth": false } }}%%
