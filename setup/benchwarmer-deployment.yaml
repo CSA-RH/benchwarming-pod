@@ -27,6 +27,13 @@ spec:
                     values:
                       - benchwarmer-pod
               topologyKey: "kubernetes.io/hostname"
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - benchwarmer-pod
+              topologyKey: "kubernetes.io/hostname"
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/openshift/httpd
           name: httpd
