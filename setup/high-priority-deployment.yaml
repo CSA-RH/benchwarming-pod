@@ -10,16 +10,15 @@ spec:
   selector:
     matchLabels:
       app: high-priority-pod
-  strategy: {}
   template:
     metadata:
       labels:
         app: high-priority-pod
     spec:
-      priorityClassName: high-priority
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/openshift/httpd
           name: httpd
+          ### Not needed, purely for demo purposes
           resources:
             requests:
               memory: "2000Mi"
