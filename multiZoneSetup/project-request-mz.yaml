@@ -1,0 +1,6 @@
+apiVersion: project.openshift.io/v1
+description: "benchwarming-multizone-autoscaling"
+displayName: benchwarming-multizone-autoscaling
+kind: ProjectRequest
+metadata:
+    name: benchwarming-multizone-autoscaling
