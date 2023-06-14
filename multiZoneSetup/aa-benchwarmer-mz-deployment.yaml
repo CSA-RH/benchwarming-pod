@@ -27,7 +27,7 @@ spec:
                     operator: In
                     values:
                       - aa-benchwarmer-mz-pod
-              topologyKey: "topologies.kubernetes.io/zone"
+              topologyKey: "topology.kubernetes.io/zone"
             - labelSelector:
                 matchExpressions:
                   - key: app
