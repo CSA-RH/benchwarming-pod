@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: benchwarmer-pod
-  name: benchwarmer-pod
-  namespace: benchwarming-autoscaling
+    app: tp-benchwarmer-mz-pod
+  name: tp-benchwarmer-mz-pod
+  namespace: benchwarming-multizone-autoscaling
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: benchwarmer-pod
+      app: tp-benchwarmer-mz-pod
   strategy: {}
   template:
     metadata:
       labels:
-        app: benchwarmer-pod
+        app: tp-benchwarmer-mz-pod
         priority: low
     spec:
       priorityClassName: low-priority
@@ -26,15 +26,22 @@ spec:
                   - key: app
                     operator: NotIn
                     values:
-                      - benchwarmer-pod
+                      - tp-benchwarmer-mz-pod
               topologyKey: "kubernetes.io/hostname"
             - labelSelector:
                 matchExpressions:
                   - key: app
                     operator: In
                     values:
-                      - benchwarmer-pod
+                      - tp-benchwarmer-mz-pod
               topologyKey: "kubernetes.io/hostname"
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: tp-benchwarmer-mz-pod
       containers:
         - image: image-registry.openshift-image-registry.svc:5000/openshift/httpd
           name: httpd
