@@ -61,3 +61,7 @@ You should end up with 2 nodes, one filled with 3 high priority pods and the oth
 [🔗 Link](./scenario2.md)
 
 8 new high priority pods arrive, and there are not enough resources to accomodate them and the previous 3 high priority pods.
+
+## Multi availability zone?
+
+Got that too! Follow the multi zone setup [🔗 here](./multiZoneSetup/README.md)
