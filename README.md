@@ -9,8 +9,8 @@ This repository was created with the goal of showcasing some scenarios where we 
   - [Assumptions](#assumptions)
   - [Setup](#setup)
   - [Scenarios](#scenarios)
-  - [Scenario 1: Scaling up, needing a new node](#scenario-1-scaling-up-needing-a-new-node)
-  - [Scenario 2: Scaling up massively, needing 2 spare nodes](#scenario-2-scaling-up-massively-needing-2-spare-nodes)
+    - [Scenario 1: Scaling up, needing a new node](#scenario-1-scaling-up-needing-a-new-node)
+    - [Scenario 2: Scaling up massively, needing 2 spare nodes](#scenario-2-scaling-up-massively-needing-2-spare-nodes)
 
 ## Preview
 
@@ -73,13 +73,13 @@ and create all the resources in the `.yaml` files.
 
 These are some sample scenarios to clarify and explain how this works step by step. Please bear in mind the scenario and commands are for the single AZ setup (to not overcomplicate the graphs), but multi AZ will work the same.
 
-## Scenario 1: Scaling up, needing a new node
+### Scenario 1: Scaling up, needing a new node
 
 [🔗 Link](./scenario1.md)
 
 4 new high priority pods arrive, and there are not enough resources to accomodate them and the previous 3 high priority pods.
 
-## Scenario 2: Scaling up massively, needing 2 spare nodes
+### Scenario 2: Scaling up massively, needing 2 spare nodes
 
 [🔗 Link](./scenario2.md)
 
