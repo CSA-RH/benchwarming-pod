@@ -13,6 +13,7 @@ To get it up and running:
 	- [What it looks like](#what-it-looks-like)
 		- [Example 1: One spare node per AZ](#example-1-one-spare-node-per-az)
 		- [Example 2: Two+ spare node per AZ](#example-2-two-spare-node-per-az)
+	- [Note on downscaling](#note-on-downscaling)
 
 ## Setup
 
@@ -210,3 +211,17 @@ graph LR
 ```
 
 It also works with non multiples of 3, in case you need to have a very granular approach to this.
+
+## Note on downscaling
+
+There is a limitation on the topology constraints from the kubernetes implementation:
+
+> There's no guarantee that the constraints remain satisfied when Pods are removed. For example, scaling down a Deployment may result in imbalanced Pods distribution
+
+So if you downscale from 12 to 3 pods with 3 AZ, you might end up with two on AZ-1 and one in AZ-3. Three nodes as expected, but on uneven AZs.
+
+In practice, and for this case, it's not going to be a problem, but good to keep in mind nonetheless.
+
+If you still want to adress it (no need, honestly), [🔗 here](https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/#known-limitations) are the official docs and references.
+
+A quick solution would be to scale the deployment to 0 pods and immediately back to the desired number of pods. Those would be evenly distributed as expected.
