@@ -4,7 +4,7 @@ metadata:
   labels:
     app: high-priority-pod
   name: high-priority-pod
-  namespace: benchwarming-multizone-autoscaling
+  namespace: benchwarming-autoscaling-cron
 spec:
   replicas: 3
   selector:

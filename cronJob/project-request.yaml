@@ -1,0 +1,6 @@
+apiVersion: project.openshift.io/v1
+description: "benchwarming-autoscaling-cron"
+displayName: benchwarming-autoscaling-cron
+kind: ProjectRequest
+metadata:
+    name: benchwarming-autoscaling-cron

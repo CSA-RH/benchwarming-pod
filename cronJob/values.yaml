@@ -1,0 +1,18 @@
+
+serviceAccountName: cronjob-scaler
+
+scaleActions:
+  scaleUp:
+    # Provide input in Cron Format -- Date/Time must be in UTC time zone
+    schedule: "59 8 * * *"  
+    components:
+    - name: benchwarmer-mz-pod
+      resourceType: Deployment
+      replicas: 9
+  scaleDown:
+    # Provide input in Cron Format -- Date/Time must be in UTC time zone
+    schedule: "6 9 * * *" 
+    components:
+    - name: benchwarmer-mz-pod
+      resourceType: Deployment
+      replicas: 1

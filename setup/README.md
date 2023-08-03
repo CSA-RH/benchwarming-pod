@@ -2,6 +2,15 @@
 
 The main goal is to have a low priority, best-effort deployment that takes up 90% of the resources of a pod, then run a high priority, high QoS Guaranteed deployment and see how the low priority nodes are evicted.
 
+- [Phase 1](#phase-1)
+  - [Steps](#steps)
+    - [1) Create the project and change to it](#1-create-the-project-and-change-to-it)
+    - [2) Ensure your machinepool on `rosa` is set to autoscale](#2-ensure-your-machinepool-on-rosa-is-set-to-autoscale)
+    - [2) Create the benchwarming pod](#2-create-the-benchwarming-pod)
+    - [3) Create the high-priority deployment](#3-create-the-high-priority-deployment)
+    - [4) Head over to the scenarios and try them](#4-head-over-to-the-scenarios-and-try-them)
+  - [Initial setup](#initial-setup)
+
 ## Steps
 
 ### 1) Create the project and change to it
