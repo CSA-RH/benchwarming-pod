@@ -1,6 +1,8 @@
 # Benchwarmer pod
 
-This repository was created with the goal of showcasing some scenarios where we need to have a set of spare nodes ready to take on a sudden increase in cluster load, avoiding downtime due to cloud provisioning. Keep in mind this could also be done with an operator.
+This repository was created with the goal of showcasing some scenarios where we need to have a set of spare nodes ready on a namespace to take on a sudden increase in cluster load, avoiding downtime due to cloud provisioning. Keep in mind this could also be done with an operator.
+
+> Note: this solution is meant to work on a specific namespace, not cluster wide unless you manually exclude all k8s/openshift level namespaces.
 
 - [Benchwarmer pod](#benchwarmer-pod)
   - [Preview](#preview)
